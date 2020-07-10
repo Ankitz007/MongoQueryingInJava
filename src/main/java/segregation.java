@@ -1,6 +1,4 @@
-import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
-import opennlp.tools.sentdetect.DefaultEndOfSentenceScanner;
 import org.bson.Document;
 import org.bson.json.JsonWriterSettings;
 
@@ -24,7 +22,6 @@ public class segregation {
         if (query.contains("sort")) {
             fs = new function_sort(query.get(query.indexOf("sort") + 1), query.get(query.indexOf("sort") + 3));
         }
-
         function_match fm = null;
         if (query.contains("match")) {
             fm = new function_match(query.get(query.indexOf("match") + 1), query.get(query.indexOf("match") + 3));
@@ -32,6 +29,14 @@ public class segregation {
         function_limit fl = null;
         if (query.contains("match")) {
             fl = new function_limit(Integer.valueOf(query.get(query.indexOf("limit")+2)));
+        }
+        function_project fp = null;
+        if (query.contains("project")) {
+            fp = new function_project();
+        }
+        function_unwind fu = null;
+        if(query.contains("unwind")) {
+            fu = new function_unwind();
         }
 
         List<Document> results = zips.aggregate(Arrays.asList(fs.generated_query_from_sort(), fm.generated_query_from_match(), fl.generated_query_from_limit()))
