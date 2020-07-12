@@ -13,7 +13,7 @@ import static com.mongodb.client.model.Sorts.descending;
 
 public class segregation {
     public static void getQuery(MongoCollection<Document> zips) {
-        String s = "sort descending by pop match city by CHICAGO limit by 5";
+        String s = "sort ascending by pop match state by NY limit by 5";
         ArrayList<String> query = new ArrayList<String>();
         for (String x : s.split(" "))
             query.add(x);
@@ -36,7 +36,7 @@ public class segregation {
         }
         function_unwind fu = null;
         if(query.contains("unwind")) {
-            fu = new function_unwind();
+            fu = new function_unwind(query.get(query.indexOf("unwind")+2));
         }
 
         List<Document> results = zips.aggregate(Arrays.asList(fs.generated_query_from_sort(), fm.generated_query_from_match(), fl.generated_query_from_limit()))
