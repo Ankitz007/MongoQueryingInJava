@@ -4,7 +4,7 @@ import static com.mongodb.client.model.Aggregates.sort;
 import static com.mongodb.client.model.Sorts.ascending;
 import static com.mongodb.client.model.Sorts.descending;
 
-public class function_sort {
+public class function_sort implements aggregate_stage {
     String sort_type;
     String sort_field;
     function_sort(String s_f){
@@ -15,7 +15,9 @@ public class function_sort {
     sort_type = s_t;
     sort_field = s_f;
     }
-    public Bson generated_query_from_sort(){
+
+    @Override
+    public Bson generated_query(){
         Bson sort_stage = sort(ascending(sort_field));;
         if(sort_type.equals("descending")){
             sort_stage = sort(descending(sort_field));

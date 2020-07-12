@@ -39,7 +39,7 @@ public class segregation {
             fu = new function_unwind(query.get(query.indexOf("unwind")+2));
         }
 
-        List<Document> results = zips.aggregate(Arrays.asList(fs.generated_query_from_sort(), fm.generated_query_from_match(), fl.generated_query_from_limit()))
+        List<Document> results = zips.aggregate(Arrays.asList(fs.generated_query(), fm.generated_query(), fl.generated_query()))
                 .into(new ArrayList<>());
         System.out.println("==> My Own Query");
         results.forEach(printDocuments());

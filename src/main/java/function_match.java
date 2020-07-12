@@ -3,7 +3,7 @@ import org.bson.conversions.Bson;
 import static com.mongodb.client.model.Aggregates.match;
 import static com.mongodb.client.model.Filters.*;
 
-public class function_match {
+public class function_match implements aggregate_stage{
     String match_field;
     String field_name;
     String match_operator;
@@ -17,7 +17,9 @@ public class function_match {
         match_operator = m_o;
         field_name = f_n;
     }
-    public Bson generated_query_from_match() {
+
+    @Override
+    public Bson generated_query() {
         Bson match_stage = match(eq(match_field, field_name));
         if(match_operator.equals("gte")){
             match_stage = match(gte(match_field, field_name));
