@@ -12,23 +12,32 @@ import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Sorts.descending;
 
 public class segregation {
-    public static void getQuery(MongoCollection<Document> zips) {
+    public static query_creation getQuery(MongoCollection<Document> zips) {
         String s = "sort ascending by pop match state by NY limit by 5";
+
+
+
+
         ArrayList<String> query = new ArrayList<String>();
         for (String x : s.split(" "))
             query.add(x);
 
+        query_creation qc = new query_creation();
+
         function_sort fs = null;
         if (query.contains("sort")) {
             fs = new function_sort(query.get(query.indexOf("sort") + 1), query.get(query.indexOf("sort") + 3));
+            qc.set_query(fs.generated_query());
         }
         function_match fm = null;
         if (query.contains("match")) {
             fm = new function_match(query.get(query.indexOf("match") + 1), query.get(query.indexOf("match") + 3));
+            qc.set_query(fm.generated_query());
         }
         function_limit fl = null;
-        if (query.contains("match")) {
+        if (query.contains("limit")) {
             fl = new function_limit(Integer.valueOf(query.get(query.indexOf("limit")+2)));
+            qc.set_query(fl.generated_query());
         }
         function_project fp = null;
         if (query.contains("project")) {
@@ -38,13 +47,7 @@ public class segregation {
         if(query.contains("unwind")) {
             fu = new function_unwind(query.get(query.indexOf("unwind")+2));
         }
+        return qc;
+    }
 
-        List<Document> results = zips.aggregate(Arrays.asList(fs.generated_query(), fm.generated_query(), fl.generated_query()))
-                .into(new ArrayList<>());
-        System.out.println("==> My Own Query");
-        results.forEach(printDocuments());
-    }
-    private static Consumer<Document> printDocuments() {
-        return doc -> System.out.println(doc.toJson(JsonWriterSettings.builder().indent(true).build()));
-    }
 }

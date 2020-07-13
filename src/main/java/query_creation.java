@@ -12,19 +12,17 @@ public class query_creation {
     public ArrayList<Bson> query = new ArrayList<Bson>();
     public void set_query(Bson stage){
         query.add(stage);
-
+        System.out.println(query);
 
     }
     public void get_query(MongoCollection<Document> zips){
-        List<Document> results = zips.aggregate(Arrays.asList(fs.generated_query(), fm.generated_query(), fl.generated_query()))
+        List<Document> results = zips.aggregate(query)
                 .into(new ArrayList<>());
         System.out.println("==> My Own Query");
         results.forEach(printDocuments());
     }
 
-
-
-    private static Consumer<Document> printDocuments() {
+    private Consumer<Document> printDocuments() {
         return doc -> System.out.println(doc.toJson(JsonWriterSettings.builder().indent(true).build()));
     }
 

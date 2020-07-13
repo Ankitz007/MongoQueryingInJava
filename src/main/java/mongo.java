@@ -33,7 +33,10 @@ public class mongo {
 //            post pos = new post();
 //            pos.threeMostPopularTags(posts);
             segregation seg = new segregation();
-            seg.getQuery(zips);
+            query_creation cont = seg.getQuery(zips);
+
+
+            cont.get_query(zips);
         }
     }
 
