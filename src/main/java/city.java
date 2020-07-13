@@ -23,12 +23,5 @@ public class city {
         Bson sort = sort(descending("totalPop"));
         Bson limit = limit(3);
 
-        List<Document> results = zips.aggregate(Arrays.asList(match, group, project, sort, limit))
-                .into(new ArrayList<>());
-        System.out.println("==> 3 most densely populated cities in Texas");
-        results.forEach(printDocuments());
-    }
-    private static Consumer<Document> printDocuments() {
-        return doc -> System.out.println(doc.toJson(JsonWriterSettings.builder().indent(true).build()));
     }
 }
