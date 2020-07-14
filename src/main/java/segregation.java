@@ -2,9 +2,7 @@ import com.mongodb.client.MongoCollection;
 import org.bson.Document;
 import org.bson.json.JsonWriterSettings;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.function.Consumer;
 
 import static com.mongodb.client.model.Aggregates.*;
@@ -15,7 +13,8 @@ public class segregation {
     public static query_creation getQuery(MongoCollection<Document> zips) {
         String s = "sort ascending by pop match state by NY limit by 5";
 
-
+        Map<String, Integer> hm = new HashMap<String, Integer>();
+        hm.put("sort", s.indexOf("sort"));
 
 
         ArrayList<String> query = new ArrayList<String>();
@@ -42,6 +41,10 @@ public class segregation {
         function_project fp = null;
         if (query.contains("project")) {
             fp = new function_project();
+        }
+        function_count fc = null;
+        if (query.contains("count")) {
+            fc = new function_count();
         }
         function_unwind fu = null;
         if(query.contains("unwind")) {
