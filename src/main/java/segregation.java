@@ -16,7 +16,6 @@ public class segregation {
         Map<String, Integer> hm = new HashMap<String, Integer>();
         hm.put("sort", s.indexOf("sort"));
 
-
         ArrayList<String> query = new ArrayList<String>();
         for (String x : s.split(" "))
             query.add(x);
@@ -38,13 +37,14 @@ public class segregation {
             fl = new function_limit(Integer.valueOf(query.get(query.indexOf("limit")+2)));
             qc.set_query(fl.generated_query());
         }
-        function_project fp = null;
-        if (query.contains("project")) {
-            fp = new function_project();
-        }
+//        function_project fp = null;
+//        if (query.contains("project")) {
+//            fp = new function_project();
+//        }
         function_count fc = null;
         if (query.contains("count")) {
             fc = new function_count();
+            qc.set_query(fc.generated_query());
         }
         function_unwind fu = null;
         if(query.contains("unwind")) {
