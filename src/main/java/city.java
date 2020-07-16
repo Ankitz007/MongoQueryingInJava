@@ -1,13 +1,6 @@
 import com.mongodb.client.MongoCollection;
 import org.bson.Document;
 import org.bson.conversions.Bson;
-import org.bson.json.JsonWriterSettings;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.function.Consumer;
-
 import static com.mongodb.client.model.Accumulators.sum;
 import static com.mongodb.client.model.Aggregates.*;
 import static com.mongodb.client.model.Filters.eq;

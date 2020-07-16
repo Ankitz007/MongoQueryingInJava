@@ -12,7 +12,6 @@ public class function_project implements aggregate_stage{
         project_fields = new ArrayList<String>(pfs);
     }
 
-
     @Override
     public Bson generated_query() {
         Bson project = project(fields(excludeId(), include(project_fields)));

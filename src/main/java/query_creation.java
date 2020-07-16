@@ -12,8 +12,6 @@ public class query_creation {
     public ArrayList<Bson> query = new ArrayList<Bson>();
     public void set_query(Bson stage){
         query.add(stage);
-        System.out.println(query);
-
     }
     public void get_query(MongoCollection<Document> zips){
         List<Document> results = zips.aggregate(query)
