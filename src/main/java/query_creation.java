@@ -4,12 +4,11 @@ import org.bson.conversions.Bson;
 import org.bson.json.JsonWriterSettings;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
 public class query_creation {
-    public ArrayList<Bson> query = new ArrayList<Bson>();
+    public ArrayList<Bson> query = new ArrayList<>();
     public void set_query(Bson stage){
         query.add(stage);
     }

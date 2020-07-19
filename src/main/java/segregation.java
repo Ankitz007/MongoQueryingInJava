@@ -1,42 +1,31 @@
-import com.mongodb.client.MongoCollection;
-import org.bson.Document;
 import java.util.*;
 
 
 public class segregation {
     ArrayList<String> query = new ArrayList<>();
-    ArrayList<String> zain;
+    ArrayList<String> proj_q;
     public void cleaning(String s){
         for (String x : s.split(" "))
             query.add(x);
 
         // Getting order of Stages
-        ArrayList<String> ank = new ArrayList<>();
-        ank.add("sort");
-        ank.add("match");
-        ank.add("unwind");
-        ank.add("project");
-        ank.add("limit");
-        ank.add("count");
+        ArrayList<String> stage_index = new ArrayList<>();
+        stage_index.add("sort");
+        stage_index.add("match");
+        stage_index.add("unwind");
+        stage_index.add("project");
+        stage_index.add("limit");
+        stage_index.add("count");
         String[] x = s.split(" ");
 
         ArrayList<String> z = new ArrayList<>(Arrays.asList(x));
         z.removeAll(Collections.singleton("by"));
         z.removeAll(Collections.singleton("to"));
-
         Map<String, Integer> hm = new HashMap<>();
-        if (z.contains(ank.get(0)))
-            hm.put("sort", z.indexOf("sort"));
-        if (z.contains(ank.get(1)))
-            hm.put("match", z.indexOf("match"));
-        if (z.contains(ank.get(2)))
-            hm.put("unwind", z.indexOf("unwind"));
-        if (z.contains(ank.get(3)))
-            hm.put("project", z.indexOf("project"));
-        if (z.contains(ank.get(4)))
-            hm.put("limit", z.indexOf("limit"));
-        if (z.contains(ank.get(5)))
-            hm.put("count", z.indexOf("count"));
+        for(int i=0; i<stage_index.size(); i++){
+            if (z.contains(stage_index.get(i)))
+                hm.put(stage_index.get(i), z.indexOf(stage_index.get(i)));
+        }
 
         Map<String, Integer> hm1 = sortByValue(hm);
         Set<Map.Entry<String, Integer>> st
@@ -45,13 +34,13 @@ public class segregation {
         for (Map.Entry<String, Integer> me : st) {
             query_stages_list.add(me.getKey());
         }
-        zain = new ArrayList<>(z.subList(hm1.get("project") + 1, hm1.get(query_stages_list.get(query_stages_list.indexOf("project") + 1))));
+        proj_q = new ArrayList<>(z.subList(hm1.get("project") + 1, hm1.get(query_stages_list.get(query_stages_list.indexOf("project") + 1))));
 
     }
 
-    public query_creation getQuery(MongoCollection<Document> zips) {
+    public query_creation getQuery() {
 
-        String s = "sort ascending by pop match state by NY project pop zip city limit by 5";
+        String s = "sort ascending by pop match state by NY project id pop zip city limit by 5";
         cleaning(s);
         query_creation qc = new query_creation();
 
@@ -72,7 +61,7 @@ public class segregation {
         }
         function_project fp;
         if (query.contains("project")) {
-            fp = new function_project(zain);
+            fp = new function_project(proj_q);
             qc.set_query(fp.generated_query());
         }
         function_count fc;
@@ -93,16 +82,10 @@ public class segregation {
                 new LinkedList<>(hm.entrySet());
 
         // Sort the list
-        Collections.sort(list, new Comparator<Map.Entry<String, Integer> >() {
-            public int compare(Map.Entry<String, Integer> o1,
-                               Map.Entry<String, Integer> o2)
-            {
-                return (o1.getValue()).compareTo(o2.getValue());
-            }
-        });
+        Collections.sort(list, Comparator.comparing(Map.Entry::getValue));
 
         // put data from sorted list to hashmap
-        HashMap<String, Integer> temp = new LinkedHashMap<String, Integer>();
+        HashMap<String, Integer> temp = new LinkedHashMap<>();
         for (Map.Entry<String, Integer> aa : list) {
             temp.put(aa.getKey(), aa.getValue());
         }

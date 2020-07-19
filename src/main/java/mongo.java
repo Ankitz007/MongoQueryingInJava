@@ -3,22 +3,11 @@ import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
-import org.bson.conversions.Bson;
 import org.bson.json.JsonWriterSettings;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static com.mongodb.client.model.Accumulators.push;
-import static com.mongodb.client.model.Accumulators.sum;
-import static com.mongodb.client.model.Aggregates.*;
-import static com.mongodb.client.model.Filters.eq;
-import static com.mongodb.client.model.Projections.*;
-import static com.mongodb.client.model.Sorts.descending;
 
 public class mongo {
 
@@ -33,7 +22,7 @@ public class mongo {
 //            post pos = new post();
 //            pos.threeMostPopularTags(posts);
             segregation seg = new segregation();
-            query_creation cont = seg.getQuery(zips);
+            query_creation cont = seg.getQuery();
 
 
             cont.get_query(zips);
